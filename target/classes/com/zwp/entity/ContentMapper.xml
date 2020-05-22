@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mapper标签要指定namespace属性，不然会报错，可看做包名-->
+<!-- 本xml是dao模式使用的 -->
+<mapper namespace="test">
+    <select id="findAll" resultType="com.zwp.entity.Content">
+        select * from book_content 
+    </select>
+    <insert id="insertContent" parameterType="com.zwp.entity.Content">
+        insert into book_content(id,name,chapter,content,number) values(#{id},#{name},#{chapter},#{content},#{number})
+    </insert>
+   
+</mapper>

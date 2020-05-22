@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mapper标签要指定namespace属性，不然会报错，可看做包名-->
+<mapper namespace="com.zwp.mapper.ContentMapper">
+	<!-- 开启本mapper和namesapce下的二级缓存 -->
+	<!-- <cache/> -->
+	<!-- 查询所有数据 -->
+    <select id="findAll" resultType="com.zwp.entity.Content">
+        select * from newbook
+    </select>
+    <!-- 插入章节内容 -->
+    <insert id="insertContent" parameterType="com.zwp.entity.Content">
+        insert into newbook(id,name,chapter,content,number) values(#{id},#{name},#{chapter},#{content},#{number})
+    </insert>
+    <!-- 复杂查询 -->
+    <select id="findContentByFlex" parameterType="com.zwp.entity.ContentVo" resultType="com.zwp.entity.Content">
+    	select * from newbook where chapter like '%${content.chapter}%'
+    </select>
+    <!-- 
+    <insert id="batchAddContent" parameterType="java.util.List">
+    	<foreach collection="list" item="item" index="index" separator=";">
+    		INSERT INTO book_content(id,name,chapter,content,number) VALUES(#{item.id},#{item.name},#{item.chapter},#{item.content},#{item.number})
+    	</foreach>
+    </insert>
+     -->
+     <!-- 批量插入，以列表的方式 -->
+     <insert id="batchAddContent" parameterType="java.util.List">
+     INSERT INTO book_content(id,name,chapter,content,number) VALUES
+    	<foreach collection="list" item="item" index="index" separator=",">
+    		(#{item.id},#{item.name},#{item.chapter},#{item.content},#{item.number})
+    	</foreach>
+    </insert>
+    <!-- 根据number查询数据 -->
+    <select id="findByNumber" parameterType="int" resultType="string">
+        select content from newbook where number=#{number}
+    </select>
+    <!-- 根据name与number联合查询，确定具体书籍的具体章节，避免多表问题 -->
+    <select id="findContentByNameAndNumber" parameterType="com.zwp.entity.Content" resultType="string">
+        SELECT content FROM newbook WHERE `name` = #{name} AND number = #{number}
+    </select>
+    <select id="findAllBook" resultType="string">
+        SELECT DISTINCT `name` FROM newbook
+    </select>
+    <delete id="delBookByName" parameterType="Content">
+        DELETE FROM newbook WHERE `name` = #{name}
+    </delete>
+
+</mapper>
