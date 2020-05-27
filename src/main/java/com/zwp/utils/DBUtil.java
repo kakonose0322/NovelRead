@@ -162,4 +162,36 @@ public class DBUtil {
 		sqlSession.close();
 		return result;
 	}
+
+	public static Integer addBookName(String bookName) throws Exception {
+		// 定义工厂类
+		SqlSessionFactory sqlSessionFactory;
+		// mybatis配置文件
+		String resource = "SqlMapConfig.xml";
+		InputStream inputStream = Resources.getResourceAsStream(resource);
+		sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		// 创建Mapper对象，mybatis自动生成mapper代理对象
+		ContentMapper mapper = sqlSession.getMapper(ContentMapper.class);
+		Integer result = mapper.addBookName(bookName);
+		sqlSession.commit();
+		sqlSession.close();
+		return result;
+	}
+
+	public static Integer delBookName(String bookName) throws Exception {
+		// 定义工厂类
+		SqlSessionFactory sqlSessionFactory;
+		// mybatis配置文件
+		String resource = "SqlMapConfig.xml";
+		InputStream inputStream = Resources.getResourceAsStream(resource);
+		sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		// 创建Mapper对象，mybatis自动生成mapper代理对象
+		ContentMapper mapper = sqlSession.getMapper(ContentMapper.class);
+		Integer result = mapper.delbookName(bookName);
+		sqlSession.commit();
+		sqlSession.close();
+		return result;
+	}
 }

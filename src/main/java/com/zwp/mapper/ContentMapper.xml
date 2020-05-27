@@ -33,6 +33,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     		(#{item.id},#{item.name},#{item.chapter},#{item.content},#{item.number})
     	</foreach>
     </insert>
+    <!-- 每次添加新书的时候，插入书籍信息 -->
+    <insert id="addBookName" parameterType="string">
+        INSERT INTO `book_name`(`name`) VALUES (#{bookName});
+    </insert>
     <!-- 根据number查询数据 -->
     <select id="findByNumber" parameterType="int" resultType="string">
         select content from newbook where number=#{number}
@@ -41,11 +45,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="findContentByNameAndNumber" parameterType="com.zwp.entity.Content" resultType="string">
         SELECT content FROM newbook WHERE `name` = #{name} AND number = #{number}
     </select>
+    <!-- 由于性能原因，废弃这种查询书目方式 -->
+    <!--<select id="findAllBook" resultType="string">-->
+        <!--SELECT DISTINCT `name` FROM newbook-->
+    <!--</select>-->
+    <!-- 从另一表快查书目 -->
     <select id="findAllBook" resultType="string">
-        SELECT DISTINCT `name` FROM newbook
+        SELECT `name` FROM book_name
     </select>
+    <!-- 删除书籍 -->
     <delete id="delBookByName" parameterType="Content">
         DELETE FROM newbook WHERE `name` = #{name}
     </delete>
-
+    <!-- 从另一个删除书籍名称，完成两表数据一致性 -->
+    <delete id="delbookName">
+        delete from  book_name where `name` = #{bookName}
+    </delete>
 </mapper>

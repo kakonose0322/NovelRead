@@ -171,11 +171,16 @@ public class ReadText {
 //                        queryContent.setName(name);
                         name = setBookName();
                         queryContent.setName(name);
-                        Integer res = DBUtil.delBookByName(queryContent);
-                        if (res > 0) {
-                            System.out.println("移除成功！");
-                        }else {
-                            System.out.println("移除失败，请联系管理员！");
+                        try {
+                            Integer res = DBUtil.delBookByName(queryContent);
+                            // 成功时顺道移除书籍表信息
+                            try {
+                                Integer sucRes = DBUtil.delBookName(queryContent.getName());
+                            }catch (Exception e) {
+                                System.out.println("书籍表移除失败，请联系管理员进行手动移除！");
+                            }
+                        }catch (Exception e) {
+                            System.out.println("移除失败，请重试！");
                         }
                         // 有数据显示的，为了防止数据耦合在一起不好观看，打印行
                         System.out.println();

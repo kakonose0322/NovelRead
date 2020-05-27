@@ -22,4 +22,8 @@ public interface ContentMapper {
 	public List<String> findAllBook();
 	// 根据name删除书籍
 	public Integer delBookByName(Content content);
+	// 分割时添加书籍信息
+    Integer addBookName(String bookName);
+    // 当分割出现问题的时候，控制书籍表删除未成功导入的书籍信息
+	Integer delbookName(String bookName);
 }

@@ -90,14 +90,18 @@ public class MyBatisTest {
 	
 	public static void main(String[] args) throws Exception {
 		DBUtil dbUtil = new DBUtil();
-		Content content = DBUtil.findAContentllContent();
-		System.out.println(content);
-		Content content2 = new Content();
-		content2.setId(2);
-		content2.setName("2");
-		content2.setChapter("2");
-		content2.setContent("2");
-		content2.setNumber(2);
-		dbUtil.insertConent(content2);
+//		Content content = DBUtil.findAContentllContent();
+//		System.out.println(content);
+//		Content content2 = new Content();
+//		content2.setId(2);
+//		content2.setName("2");
+//		content2.setChapter("2");
+//		content2.setContent("2");
+//		content2.setNumber(2);
+//		dbUtil.insertConent(content2);
+		String bookName = "demo";
+//		int row = dbUtil.addBookName(bookName);
+		int row = dbUtil.delBookName(bookName);
+		System.out.println(row);
 	}
 }

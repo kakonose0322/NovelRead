@@ -27,6 +27,7 @@ public class SplitText {
 
 	/**
 	 * 截取图书名称
+     * v2: 为了方便查询书目，切分书籍表，在获取的同时，将书籍名存入书籍表
 	 * @param bookPath
 	 * @return
 	 */
@@ -41,6 +42,11 @@ public class SplitText {
         int typeIndex = after.lastIndexOf(".");
         String bookName = after.substring(0,typeIndex);
         System.out.println(bookName);
+        try {
+            DBUtil.addBookName(bookName);
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
         return bookName;
     }
     
@@ -126,12 +132,20 @@ public class SplitText {
                             content.setContent(substring);
 //                            book.add(content);
 //                            System.out.println(content.toString());
-                            // 将章节转存进MySQL
-                            dbUtil.insertConent(content);
+                            // 将章节转存进MySQL，如果发生问题，顺道删除书籍
+                            try {
+                                dbUtil.insertConent(content);
+                            }catch (Exception e){
+                                try {
+                                    dbUtil.delBookName(bookName);
+                                }catch (Exception e1) {
+                                    System.out.println("删除出现问题，请手动删除本书目录");
+                                    e1.printStackTrace();
+                                }
+                                e.printStackTrace();
+                            }
                         }
-
                     }
-                    
                 }
                 bufferedReader.close();
             } else {
