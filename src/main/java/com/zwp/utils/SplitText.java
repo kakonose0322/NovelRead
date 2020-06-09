@@ -65,8 +65,8 @@ public class SplitText {
         String bookName = getRegBookName(fileNamedirs);
         try {
             // 编码格式
-            String encoding = "GBK";
-            // String encoding = "UTF-8";
+//            String encoding = "GBK";
+             String encoding = "UTF-8";
             // 文件路径
             File file = new File(fileNamedirs);
             if (file.isFile() && file.exists()) { // 判断文件是否存在

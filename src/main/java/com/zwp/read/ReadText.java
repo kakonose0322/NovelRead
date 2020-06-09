@@ -67,7 +67,7 @@ public class ReadText {
 //                }
 //            }
 
-            while (userInput < 7) {
+            while (userInput < 9) {
                 // 第一次进入无需加载菜单项，且运行模式不等于3(自起始开始累计的，所以无需重复触发)
                 if (useCount != 0 && userInput != 3) {
                     printScreen();
@@ -187,6 +187,30 @@ public class ReadText {
                         System.out.println();
                         useCount++;
                         break;
+                    case 7:
+                        System.out.println("请输入要查询的章节的精准内容（注意：尽量不一致，不然后续无法确认章节）：");
+                        content = sc.next();
+                        List<Integer> res = DBUtil.findNumerByContent(content);
+                        System.out.println("包含改内容的章节号为（在为列表的情况下，最接近预期章节号的为准确值，可通过功能8确认）：");
+                        // 打印查找到包含改内容的章节号
+                        res.forEach(System.out::println);
+                        // 有数据显示的，为了防止数据耦合在一起不好观看，打印行
+                        System.out.println();
+                        System.out.println();
+                        useCount++;
+                        break;
+                    case 8:
+                        System.out.println("请输入要查询的章节号：");
+                        myInput = sc.nextInt();
+                        queryContent.setNumber(myInput);
+                        content = DBUtil.findContentByNumber(queryContent);
+                        // 打印所找到的文章内容，确定是否为本章节
+                        System.out.println(content);
+                        // 有数据显示的，为了防止数据耦合在一起不好观看，打印行
+                        System.out.println();
+                        System.out.println();
+                        useCount++;
+                        break;
                     default:
                         System.out.println("您的输入有误，请按提示输入！");
                         useCount++;
@@ -212,6 +236,8 @@ public class ReadText {
         System.out.println("4: 为本系统添加新的书籍（源文件路径为：F:\\电子书\\网络小说\\）；");
         System.out.println("5: 查询系统已有书目；");
         System.out.println("6: 移除您想移除的书目；");
+        System.out.println("7: 根据您已知的章节内容查询该书的章节号；");
+        System.out.println("8: 根据章节号返回文本内容，确定精确章节内容；");
     }
 
     public static String setBookName() {

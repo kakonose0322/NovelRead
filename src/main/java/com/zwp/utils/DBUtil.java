@@ -194,4 +194,36 @@ public class DBUtil {
 		sqlSession.close();
 		return result;
 	}
+
+	public static List<Integer> findNumerByContent(String content) throws Exception {
+		// 定义工厂类
+		SqlSessionFactory sqlSessionFactory;
+		// mybatis配置文件
+		String resource = "SqlMapConfig.xml";
+		InputStream inputStream = Resources.getResourceAsStream(resource);
+		sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		// 创建Mapper对象，mybatis自动生成mapper代理对象
+		ContentMapper mapper = sqlSession.getMapper(ContentMapper.class);
+		List<Integer> result = mapper.findNumerByContent(content);
+		sqlSession.commit();
+		sqlSession.close();
+		return result;
+	}
+
+	public static String findContentByNumber(Content content) throws Exception {
+		// 定义工厂类
+		SqlSessionFactory sqlSessionFactory;
+		// mybatis配置文件
+		String resource = "SqlMapConfig.xml";
+		InputStream inputStream = Resources.getResourceAsStream(resource);
+		sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+		SqlSession sqlSession = sqlSessionFactory.openSession();
+		// 创建Mapper对象，mybatis自动生成mapper代理对象
+		ContentMapper mapper = sqlSession.getMapper(ContentMapper.class);
+		String result = mapper.findContentByNumber(content);
+		sqlSession.commit();
+		sqlSession.close();
+		return result;
+	}
 }

@@ -26,4 +26,8 @@ public interface ContentMapper {
     Integer addBookName(String bookName);
     // 当分割出现问题的时候，控制书籍表删除未成功导入的书籍信息
 	Integer delbookName(String bookName);
+	// 根据内容查找章节号
+	List<Integer> findNumerByContent(String content);
+	// 根据章节号返回小说内容
+	String findContentByNumber(Content content);
 }

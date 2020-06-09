@@ -53,6 +53,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="findAllBook" resultType="string">
         SELECT `name` FROM book_name
     </select>
+    <!-- 根据内容查找章节号 -->
+    <select id="findNumerByContent" parameterType="string" resultType="java.lang.Integer">
+        SELECT number FROM newbook WHERE content LIKE concat('%',#{content},'%')
+    </select>
+    <!-- 根据内容查找章节号 -->
+    <select id="findContentByNumber" parameterType="Content" resultType="java.lang.String">
+        SELECT content FROM newbook WHERE `name`=#{name} AND number=#{number};
+    </select>
     <!-- 删除书籍 -->
     <delete id="delBookByName" parameterType="Content">
         DELETE FROM newbook WHERE `name` = #{name}
