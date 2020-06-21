@@ -9,6 +9,7 @@ import com.jacob.com.Variant;
 import com.zwp.entity.Content;
 import com.zwp.utils.DBUtil;
 import com.zwp.utils.SplitText;
+import com.zwp.utils.WindowsCmdUtil;
 
 public class ReadText {
 	public static void main(String[] args) {  
@@ -67,7 +68,7 @@ public class ReadText {
 //                }
 //            }
 
-            while (userInput < 9) {
+            while (userInput < 12) {
                 // 第一次进入无需加载菜单项，且运行模式不等于3(自起始开始累计的，所以无需重复触发)
                 if (useCount != 0 && userInput != 3) {
                     printScreen();
@@ -162,7 +163,6 @@ public class ReadText {
                         booklist.forEach(System.out::println);
                         // 有数据显示的，为了防止数据耦合在一起不好观看，打印行
                         System.out.println();
-                        System.out.println();
                         useCount++;
                         break;
                     case 6:
@@ -184,7 +184,6 @@ public class ReadText {
                         }
                         // 有数据显示的，为了防止数据耦合在一起不好观看，打印行
                         System.out.println();
-                        System.out.println();
                         useCount++;
                         break;
                     case 7:
@@ -195,7 +194,6 @@ public class ReadText {
                         // 打印查找到包含改内容的章节号
                         res.forEach(System.out::println);
                         // 有数据显示的，为了防止数据耦合在一起不好观看，打印行
-                        System.out.println();
                         System.out.println();
                         useCount++;
                         break;
@@ -208,9 +206,32 @@ public class ReadText {
                         System.out.println(content);
                         // 有数据显示的，为了防止数据耦合在一起不好观看，打印行
                         System.out.println();
+                        useCount++;
+                        break;
+                    case 9:
+                        System.out.println("请输入要增量添加的书籍名：");
+                        String addBook = sc.next();
+                        System.out.println("请输入该书籍的作者：");
+                        String bookAuthor = sc.next();
+                        System.out.println("请输入要添加的章节名（注意：要与该章节标题完全一致）：");
+                        String addChapterName = sc.next();
+                        WindowsCmdUtil.setupPythonToGetContent(addBook, bookAuthor, addChapterName);
+                        System.out.println("可以通过功能8完成内容增加的确认");
                         System.out.println();
                         useCount++;
                         break;
+                    case 10:
+                        System.out.println("请输入要全量添加的书籍名：");
+                        String addFullBook = sc.next();
+                        WindowsCmdUtil.setupPythonToGetText(addFullBook);
+                        System.out.println("通过11查看对应目录文件，是否添加成功，这里有可能该网站未收录您想要的书籍。");
+                        System.out.println();
+                        useCount++;
+                        break;
+                    case 11:
+                        System.out.println();
+                        WindowsCmdUtil.findFile();
+                        System.out.println();
                     default:
                         System.out.println("您的输入有误，请按提示输入！");
                         useCount++;
@@ -227,6 +248,7 @@ public class ReadText {
     }
 
     public static void printScreen() {
+        System.out.println();
         System.out.println("请输入要听取的模式：");
         // （此项的结果值必须存在，不然无法使用）
         System.out.println("0: 请确定想要的书籍名；");
@@ -238,6 +260,10 @@ public class ReadText {
         System.out.println("6: 移除您想移除的书目；");
         System.out.println("7: 根据您已知的章节内容查询该书的章节号；");
         System.out.println("8: 根据章节号返回文本内容，确定精确章节内容；");
+        System.out.println("9: 根据书名、作者名、章节名，对已有书目进行增量添加；");
+        System.out.println("10: 根据书名，从网站获得整本小说TXT文件，放入指定文件夹；");
+        System.out.println("11: 遍历指定文件夹，查询是否增加成功，如果失败，请自行下载，或等待管理员后续补充可用链接；");
+        System.out.println();
     }
 
     public static String setBookName() {
