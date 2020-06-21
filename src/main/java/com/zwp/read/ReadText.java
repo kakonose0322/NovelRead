@@ -232,6 +232,8 @@ public class ReadText {
                         System.out.println();
                         WindowsCmdUtil.findFile();
                         System.out.println();
+                        useCount++;
+                        break;
                     default:
                         System.out.println("您的输入有误，请按提示输入！");
                         useCount++;
