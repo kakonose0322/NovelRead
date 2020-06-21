@@ -42,11 +42,13 @@ public class SplitText {
         int typeIndex = after.lastIndexOf(".");
         String bookName = after.substring(0,typeIndex);
         System.out.println(bookName);
-        try {
-            DBUtil.addBookName(bookName);
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+        // 顺序执行应该在这里插入的，但是，后来和人讨论，我又钻牛角尖了
+        // 将这里移动至分割结束
+//        try {
+//            DBUtil.addBookName(bookName);
+//        }catch (Exception e) {
+//            e.printStackTrace();
+//        }
         return bookName;
     }
     
@@ -55,6 +57,8 @@ public class SplitText {
      * @return
      */
     public void splitXS() {
+        // 记录影响行数
+        int insertCount = 0;
     	// 保存小说章节的工具类
     	DBUtil dbUtil = new DBUtil();
 //         定义一个Content列表保存图书信息
@@ -65,8 +69,8 @@ public class SplitText {
         String bookName = getRegBookName(fileNamedirs);
         try {
             // 编码格式
-//            String encoding = "GBK";
-             String encoding = "UTF-8";
+            String encoding = "GBK";
+//             String encoding = "UTF-8";
             // 文件路径
             File file = new File(fileNamedirs);
             if (file.isFile() && file.exists()) { // 判断文件是否存在
@@ -135,13 +139,16 @@ public class SplitText {
                             // 将章节转存进MySQL，如果发生问题，顺道删除书籍
                             try {
                                 dbUtil.insertConent(content);
+                                insertCount ++;
                             }catch (Exception e){
-                                try {
-                                    dbUtil.delBookName(bookName);
-                                }catch (Exception e1) {
-                                    System.out.println("删除出现问题，请手动删除本书目录");
-                                    e1.printStackTrace();
-                                }
+                                System.out.println("插入出现问题，请仔细查看以下报错信息：");
+                                // 这里就不用再判断了
+//                                try {
+//                                    dbUtil.delBookName(bookName);
+//                                }catch (Exception e1) {
+//                                    System.out.println("删除出现问题，请手动删除本书目录");
+//                                    e1.printStackTrace();
+//                                }
                                 e.printStackTrace();
                             }
                         }
@@ -155,7 +162,20 @@ public class SplitText {
             System.out.println("读取文件内容出错");
             e.printStackTrace();
         }
-//        return book;
+        // 判断影响行数，如果插入行数为零那么，切割是有问题的，不可以执行插入书目操作
+        if (insertCount > 0) {
+            System.out.println("插入成功，开始同步书名！");
+            try {
+                DBUtil.addBookName(bookName);
+                System.out.println("同步书名结束，恭喜您录入书籍成功！");
+            }catch (Exception e) {
+                System.out.println("同步书名失败，请移除书籍，重新导入！");
+                e.printStackTrace();
+            }
+        }else {
+            System.out.println("如果没有报错信息，就是分割出现问题，请检查章节名格式，推荐统一将数字转化为中文！");
+        }
+        //        return book;
     }
     
     public static void main(String[] args) throws Exception {
